@@ -17,14 +17,16 @@
 
 fs = require 'fs'
 
+str2charptr = (string) -> allocate intArrayFromString(string), 'i8', ALLOC_NORMAL
+
 class GitRepository
   constructor: (@ptr) ->
-
+    @workdir = Pointer_stringify bindings.getWorkDir @ptr
 
 @git =
   clone: (uri, dest, branch, callback) ->
     uri_ = Pointer_stringify uri
-    dest_ = if dest? then Pointer_stringify dest else 0
-    branch_ = if branch? then Pointer_stringify branch else 0
+    dest_ = if dest? then str2charptr dest else 0
+    branch_ = if branch? then str2charptr branch else 0
     callback_ = if callback? then Runtime.addFunction callback else 0
     new GitRepository bindings.clone uri_, dest_, branch_, callback_
