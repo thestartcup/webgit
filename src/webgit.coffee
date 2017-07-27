@@ -21,10 +21,10 @@ class GitRepository
   constructor: (@ptr) ->
 
 
-git =
+@git =
   clone: (uri, dest, branch, callback) ->
     uri_ = Pointer_stringify uri
     dest_ = if dest? then Pointer_stringify dest else 0
     branch_ = if branch? then Pointer_stringify branch else 0
-    callback_ = Runtime.addFunction callback
+    callback_ = if callback? then Runtime.addFunction callback else 0
     new GitRepository bindings.clone uri_, dest_, branch_, callback_
